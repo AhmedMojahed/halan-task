@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  app:
+    restart: always
+    build: .
+    ports: 
+      - '80:5000'
+    links:
+      - psql
+  psql:
+    image: postgres:13.1
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/psql_pass
+      POSTGRES_USER_FILE: /run/secrets/psql_user
+    secrets:
+      - psql_user
+      - psql_pass
+    ports:
+      - '5432:5432'
+
+secrets:
+  psql_user:
+    external: true
+  psql_pass:
+    external: true
