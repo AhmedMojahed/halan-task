@@ -2,3 +2,5 @@ flask==1.1.2
 flask-sqlalchemy==2.4.4
 flask-marshmallow==0.14.0
 marshmallow-sqlalchemy==0.24.1
+psycopg2-binary==2.8.6
+flask-script==2.0.6

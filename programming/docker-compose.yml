@@ -1,26 +1,26 @@
-version: '3'
+version: '3.5'
 
 services:
-  app:
+  api:
     restart: always
     build: .
     ports: 
       - '80:5000'
-    links:
+    depends_on:
       - psql
+
   psql:
     image: postgres:13.1
+    restart: always
     environment:
-      POSTGRES_PASSWORD_FILE: /run/secrets/psql_pass
-      POSTGRES_USER_FILE: /run/secrets/psql_user
-    secrets:
-      - psql_user
-      - psql_pass
+      POSTGRES_PASSWORD: mypasswd
+      POSTGRES_USER: devops
+      POSTGRES_DB: devops
     ports:
       - '5432:5432'
+    volumes: 
+      - psql-data:/var/lib/postgresql/data
 
-secrets:
-  psql_user:
-    external: true
-  psql_pass:
-    external: true
+
+volumes:
+  psql-data:

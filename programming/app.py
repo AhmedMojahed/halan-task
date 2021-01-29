@@ -1,14 +1,20 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy 
 from flask_marshmallow import Marshmallow 
+from flask_script import Manager, Server
 import os 
+
+
 
 # Init app
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
+manager = Manager(app)
+
 
 # DataBase
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres@localhost:5432/template1'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://devops:mypasswd@psql:5432/devops'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres@localhost:5432/devops'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Init DB
@@ -60,7 +66,24 @@ def get_allips():
     return jsonify(result)
 
 
+# manpulate server
 
-# Run Server
-if __name__ == '__main__':
-    app.run(debug=True)
+def create_db():
+    db.create_all()
+
+
+class CustomServer(Server):
+    def __call__(self, app, *args, **kwargs):
+        create_db()
+        return Server.__call__(self, app, *args, **kwargs)
+
+# Remeber to add the command to your Manager instance
+manager.add_command('runserver', CustomServer())
+
+if __name__ == "__main__":
+    manager.run()
+
+# # Run Server
+# if __name__ == '__main__':
+#     app.run(debug=True)
+#     db.create_all()
