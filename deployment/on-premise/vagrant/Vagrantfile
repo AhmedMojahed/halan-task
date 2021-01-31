@@ -1,0 +1,24 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+
+Vagrant.configure("2") do |config|
+
+  # Box settings
+  config.vm.box = "centos/7"
+  config.vm.box_check_update = false
+
+  # Provider settings
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = 2048
+    vb.cpus = 2
+    vb.name = "node1"  
+  end
+
+  # Provisioning settings
+  config.vm.provision "shell", inline: <<-SHELL
+    yum update   
+    yum install -y git
+  SHELL
+
+end
