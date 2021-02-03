@@ -10,5 +10,5 @@ RUN pip install --upgrade pip && \
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-EXPOSE 5000
-CMD [ "python","app.py","runserver" ]
+EXPOSE 5050
+CMD [ "python","app.py" ]

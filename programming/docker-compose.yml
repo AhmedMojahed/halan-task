@@ -1,14 +1,6 @@
 version: '3.5'
 
 services:
-  api:
-    restart: always
-    build: .
-    ports: 
-      - '80:5000'
-    depends_on:
-      - psql
-
   psql:
     image: postgres:13.1
     restart: always
@@ -20,6 +12,14 @@ services:
       - '5432:5432'
     volumes: 
       - psql-data:/var/lib/postgresql/data
+  
+  api:
+    restart: always
+    build: .
+    ports: 
+      - '80:5050'
+    depends_on:
+      - psql
 
 
 volumes:
