@@ -23,7 +23,8 @@
 
 - meta: flush_handlers
 
-  
+- name: Create DataBase
+  command: sudo -u postgres -s psql -c "create database devops;"
   
   
   

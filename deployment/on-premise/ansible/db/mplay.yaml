@@ -22,7 +22,7 @@
     - name: Start and Enable postgres service
       systemd:
         name: postgresql-13
-        state: started
+        state: stopped
         enabled: yes
     
     - name: Add postgres to firewall

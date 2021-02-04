@@ -1,0 +1,11 @@
+---
+- name: Moving old conf.
+  command: mv /var/lib/pgsql/13/data/ /var/lib/pgsql/13/data-orig/
+
+- name: copy conf files and link replica
+  expect:
+    command: sudo -u postgres -s pg_basebackup -h 10.0.0.11 -D /var/lib/pgsql/13/data -U replica -v -P -R -X stream -C -S pgstandby1
+    responses:
+      (?i)password: "replica"
+  notify: restart_service
+
