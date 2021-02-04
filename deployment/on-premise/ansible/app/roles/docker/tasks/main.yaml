@@ -1,0 +1,20 @@
+---
+- name: Install docker
+  script: files/get-docker.sh
+  notify: start_service
+
+- meta: flush_handlers
+
+- name: copy app files
+  copy:
+    src: ../../../../../../../programming/
+    dest: /root/
+  notify: change_dir
+
+- meta: flush_handlers
+
+- name: build app image
+  command: docker image build . -t api-app
+
+- name: Create container
+  command: docker container run -d --name api -p 80:5050 api-app

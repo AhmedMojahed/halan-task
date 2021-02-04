@@ -1,0 +1,4 @@
+---
+- name: install_flask
+  pip:
+    reqrierments: /root/requirements.txt

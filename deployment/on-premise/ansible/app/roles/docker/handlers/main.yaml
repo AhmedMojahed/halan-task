@@ -1,0 +1,9 @@
+---
+- name: start_service
+  systemd: 
+    name: docker
+    state: started
+    enabled: yes
+
+- name: change_dir
+  chdir: /root/

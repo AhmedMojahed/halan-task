@@ -1,0 +1,12 @@
+---
+- name: install pip
+  dnf: 
+    name: python3-pip
+    state: latest
+    update_cache: true
+  notify: install_flask
+- meta: flush_handlers
+
+- name: start app 
+  chdir: /root/
+  command: python3 app.py
