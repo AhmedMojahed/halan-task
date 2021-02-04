@@ -1,0 +1,49 @@
+---
+- hosts: DBC
+  tasks:
+    - name: Disable postgres default module
+      command: dnf -qy module disable postgresql
+
+    - name: Install postgres repo
+      dnf:
+        name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+        disable_gpg_check: yes
+
+    - name: Install Postgres PKGS
+      dnf:
+        name:
+          - postgresql13
+          - postgresql13-server
+        disable_gpg_check: yes
+    
+    - name: Initialize DataBase
+      command: /usr/pgsql-13/bin/postgresql-13-setup initdb
+
+    - name: Start and Enable postgres service
+      systemd:
+        name: postgresql-13
+        state: started
+        enabled: yes
+    
+    - name: Add postgres to firewall
+      firewalld:
+        service: postgresql
+        permanent: yes
+      notify: firewall_reload
+    
+    - meta: flush_handlers
+        
+
+
+- hosts: DBM
+  roles:
+    - master
+
+- hosts: DBS
+  roles:
+    - slave
+
+
+- handlers:
+    - name: firewall_reload
+      command: firewall-cmd --reload
