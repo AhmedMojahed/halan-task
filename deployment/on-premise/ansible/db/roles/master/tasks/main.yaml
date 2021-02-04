@@ -1,0 +1,29 @@
+---
+- name: Make Server listens on any address
+  command: sudo -u postgres -s psql -c "ALTER SYSTEM SET listen_addresses TO '*';"
+
+- name: Create replica User
+  expect:
+    command: sudo -u postgres -s createuser --replication -P -e replica
+    responses:
+      (?i)password: "replica"
+      (?i)again: "replica"
+  # shell: sudo -u postgres -s createuser --replication -P -e replica
+  # stdin:
+  #   - replica
+  #   - replica
+
+
+- name: edit pg_hda.conf file
+  lineinfile:
+    path: /var/lib/pgsql/13/data/pg_hba.conf
+    line: host	replication 	replica 	10.0.0.12/8		md5
+    state: present
+  notify: restart_service
+
+- meta: flush_handlers
+
+  
+  
+  
+  

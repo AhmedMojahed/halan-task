@@ -1,0 +1,5 @@
+---
+- name: restart_service
+  systemd:
+    name: postgresql-13
+    state: restartd
