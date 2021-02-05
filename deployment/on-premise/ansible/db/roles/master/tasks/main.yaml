@@ -29,13 +29,21 @@
   #     (?i)again: "{{ DB_REPLICA_PASS }}"    # DB_REPLICA_PASS
    
 
-- name: edit pg_hda.conf file
+- name: Add replica user entry in pg_hda.conf file
   postgresql_pg_hba:
     dest: /var/lib/pgsql/13/data/pg_hba.conf
     contype: host
     users: "{{ DB_REPLICA_NAME }}" 
     source: "{{ SLAVEDB_PRIVATE_IP }}/24"
     databases: replication
+
+  name: Add db_user entry in pg_hda.conf file
+  postgresql_pg_hba:
+    dest: /var/lib/pgsql/13/data/pg_hba.conf
+    contype: host
+    users: "{{ DB_USER_NAME }}" 
+    source: "{{ APP_PRIVATE_IP }}/24"
+    databases: all
     
   # lineinfile:
   #   path: /var/lib/pgsql/13/data/pg_hba.conf
