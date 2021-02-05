@@ -2,16 +2,18 @@
 
 ARG=$1
 
-cd development/devops-task/deployment/on-premise/vagrant/
-if [[$ARG -eq "up"]]
+cd deployment/on-premise/vagrant/
+if [[ $ARG -eq "up" ]]
 then
     echo "creating vms" 
-    vagrant $ARG
-elif  [[ $ARG -eq "halt" ]]
+    vagrant up
+elif [[ $ARG -eq "halt" ]]
+then
     echo "shuting down vms" 
-    vagrant $ARG -f
-elif  [[ $ARG -eq "destroy" ]]
+    vagrant halt -f
+elif [[ $ARG -eq "destroy" ]]
+then
     echo "destroying vms" 
-    vagrant $ARG -f
+    vagrant destroy -f
 fi
 
