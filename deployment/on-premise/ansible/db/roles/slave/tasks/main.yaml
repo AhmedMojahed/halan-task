@@ -5,12 +5,20 @@
     state: stopped
 
 - name: Moving old conf.
-  command: sudo -u postgres -s mv /var/lib/pgsql/13/data/ /var/lib/pgsql/13/data-bacup/
+  command: sudo -u postgres -s mv /var/lib/pgsql/13/data/ /var/lib/pgsql/13/data-bacup/ 
+  ignore_errors: yes
 
 - name: copy conf files and link replica
+  # become_user: postgres
+  # postgresql_slot:
+  #   slot_name: pgstandby1
+  #   db: "{{ DB_NAME }}"
+  #   login_host: "{{ MASTERDB_PRIVATE_IP }}"
+  #   login_host: "{{ DB_USER_NAME }}"
+  #   login_password: "{{ DB_USER_PASS }}"
   expect:
-    command: sudo -u postgres -s pg_basebackup -h 192.168.44.11 -D /var/lib/pgsql/13/data -U replica -v -P -R -X stream -C -S pgstandby1
+    command: sudo -u postgres -s pg_basebackup -h {{ MASTERDB_PRIVATE_IP }} -D /var/lib/pgsql/13/data -U {{ DB_REPLICA_NAME }} -v -P -R -X stream -C -S pgstandby1 # MASTERDB_PRIVATE_IP, DB_REPLICA_NAME
     responses:
-      (?i)password: "replica"
+      (?i)password: "{{ DB_REPLICA_PASS }}"   # DB_REPLICA_PASS
   notify: restart_service
-
+- meta: flush_handlers

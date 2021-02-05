@@ -46,7 +46,21 @@ vagrant ssh node3   # to connect to SlaveDB machine
 ```
 
 ### Note:
-If you want to deploy on any cloud provider you can by changing the prider in [vagrantfile](/deployment/on-premise/vagrant/Vagrantfile) and provider configuration in the docs.
+- You can change defualt values by changing extra_vars in [vagrantfile](/deployment/on-premise/vagrant/Vagrantfile) and run the same command in step 3.
+Uncomment and change values as you like.
+ ```bash
+ ansible.extra_vars = { 
+            ansible_python_interpreter: "/usr/bin/python3",
+            # DB_NAME: "devops",
+            # DB_USER_NAME: "devops",
+            # DB_USER_PASS: "devops",
+            # DB_REPLICA_NAME: "replica",
+            # DB_REPLICA_PASS: "replica",
+            # MASTERDB_PRIVATE_IP: "192.168.44.11",
+            # SLAVEDB_PRIVATE_IP: "192.168.44.12"
+          }
+```
+- If you want to deploy on any cloud provider you can by changing the prider in [vagrantfile](/deployment/on-premise/vagrant/Vagrantfile) and provider configuration in the docs.
 
 ## Deployment: Option #2
 

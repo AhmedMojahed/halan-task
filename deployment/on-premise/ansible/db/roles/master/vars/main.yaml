@@ -1,0 +1,7 @@
+---
+DB_NAME: devops
+DB_USER_NAME: devops
+DB_USER_PASS: devops
+DB_REPLICA_NAME: replica
+DB_REPLICA_PASS: replica
+SLAVEDB_PRIVATE_IP: 192.168.44.12

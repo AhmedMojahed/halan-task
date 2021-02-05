@@ -3,36 +3,49 @@
   command: sudo -u postgres -s psql -c "ALTER SYSTEM SET listen_addresses TO '*';"
 
 - name: Create databaseuser for connection
-  expect:
-    command: sudo -u postgres -s createuser --superuser -P -e devops # db_user and pass as vars
-    responses:
-      (?i)password: "devops"
-      (?i)again: "devops"
+  become_user: postgres
+  postgresql_user:
+    name: "{{ DB_USER_NAME }}"
+    password: "{{ DB_USER_PASS }}"
+    role_attr_flags: "SUPERUSER"
+    state: present
+  # expect:
+  #   command: sudo -u postgres -s createuser --superuser -P -e {{ DB_USER_NAME }} # DB_USER_NAME
+  #   responses:
+  #     (?i)password: "{{ DB_USER_PASS }}"    # DB_USER_PASS
+  #     (?i)again: "{{ DB_USER_PASS }}"     # DB_USER_PASS
 
 - name: Create replica User for database replication
-  expect:
-    command: sudo -u postgres -s createuser --replication -P -e replica # db_replpass as var
-    responses:
-      (?i)password: "replica"
-      (?i)again: "replica"
-    
-  # shell: sudo -u postgres -s createuser --replication -P -e replica
-  # stdin:
-  #   - replica
-  #   - replica
-
+  become_user: postgres
+  postgresql_user:
+    name: "{{ DB_REPLICA_NAME }}"
+    password: "{{ DB_REPLICA_PASS }}"
+    role_attr_flags: "REPLICATION"
+    state: present
+  # expect:
+  #   command: sudo -u postgres -s createuser --replication -P -e {{ DB_REPLICA_NAME }} # DB_REPLICA_NAME
+  #   responses:
+  #     (?i)password: "{{ DB_REPLICA_PASS }}"   # DB_REPLICA_PASS
+  #     (?i)again: "{{ DB_REPLICA_PASS }}"    # DB_REPLICA_PASS
+   
 
 - name: edit pg_hda.conf file
-  lineinfile:
-    path: /var/lib/pgsql/13/data/pg_hba.conf
-    line: host	replication 	replica 	192.168.44.12/24	md5 # dbs_ip as variables
-    state: present
+  postgresql_pg_hba:
+    dest: /var/lib/pgsql/13/data/pg_hba.conf
+    contype: host
+    users: "{{ DB_REPLICA_NAME }}" 
+    source: "{{ SLAVEDB_PRIVATE_IP }}/24"
+    databases: replication
+    
+  # lineinfile:
+  #   path: /var/lib/pgsql/13/data/pg_hba.conf
+  #   state: present
   notify: restart_service
 
 - meta: flush_handlers
 
 - name: Create DataBase
-  command: sudo -u postgres -s psql -c "create database devops;" # database name as variable
+  command: sudo -u postgres -s psql -c "create database {{ DB_NAME }};" #  DB_NAME
   
   
   

@@ -4,21 +4,22 @@ from flask_marshmallow import Marshmallow
 from flask_script import Manager, Server
 import os 
 
-
+# Enviroment variables
+MASTERDB_PRIVATE_IP=os.getenv('MASTERDB_PRIVATE_IP', '192.168.44.11')
+DB_USER_NAME=os.getenv('DB_USER_NAME', 'devops')
+DB_NAME=os.getenv('DB_NAME', 'devops')
+DB_USER_PASS=os.getenv('DB_USER_PASS', 'devops')
 
 # Init app
 app = Flask(__name__)
-# basedir = os.path.abspath(os.path.dirname(__file__))
-# manager = Manager(app)
-
 
 # DataBase
 
 # connection with database container with compose
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://devops:mypasswd@psql:5432/devops'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://devops:mypasswd@psql:5432/devops'
 
 # connection with local data base or remote db server
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres@localhost:5432/devops'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://{username}:{passwd}@{dbm_ip}/{db_name}'.format(username=DB_USER_NAME,passwd=DB_USER_PASS,dbm_ip=MASTERDB_PRIVATE_IP,db_name=DB_NAME)
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -72,22 +73,6 @@ def get_allips():
     allips = IP.query.all()
     result = ips_schema.dump(allips)
     return jsonify(result)
-
-
-# manpulate server
-# def create_db():
-#     db.create_all()
-
-# class CustomServer(Server):
-#     def __call__(self, app, *args, **kwargs):
-#         create_db()
-#         return Server.__call__(self, app, *args, **kwargs)
-
-# # Remeber to add the command to your Manager instance
-# manager.add_command('runserver', CustomServer())
-
-# if __name__ == "__main__":
-#     manager.run()
 
 # Run Server
 if __name__ == '__main__':

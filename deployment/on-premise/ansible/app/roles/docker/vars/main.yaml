@@ -1,0 +1,5 @@
+---
+DB_NAME: devops
+DB_USER_NAME: devops
+DB_USER_PASS: devops
+MASTERDB_PRIVATE_IP: 192.168.44.11

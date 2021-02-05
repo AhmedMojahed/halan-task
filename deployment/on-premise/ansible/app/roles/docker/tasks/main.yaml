@@ -9,10 +9,24 @@
   copy:
     # src: ../../../../../../../programming/
     src: files/app/
-    dest: /root/app/
+    dest: /home/vagrant/app/
 
 - name: build app image
-  command: docker image build /root/app/ -t api-app
+  # command: docker image build /home/vagrant/app/ -t api-app
+  docker_image:
+    name: app-api
+    build:
+      path: /home/vagrant/app/
 
 - name: Create container
-  command: docker container run -d --name api -p 80:5050 api-app
+  docker_container:
+    name: api
+    image: app-api
+    restart: yes
+    ports:
+    - "80:5050"
+    env:
+      MASTERDB_PRIVATE_IP: "{{ MASTERDB_PRIVATE_IP }}" 
+      DB_NAME: "{{ DB_NAME }}" 
+      DB_USER_NAME: "{{ DB_USER_NAME }}" 
+      DB_USER_PASS: "{{ DB_USER_PASS }}" 
