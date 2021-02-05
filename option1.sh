@@ -6,14 +6,14 @@ cd deployment/on-premise/vagrant/
 if [[ $ARG -eq "up" ]]
 then
     echo "creating vms" 
-    vagrant up
+    vagrant $ARG
 elif [[ $ARG -eq "halt" ]]
 then
     echo "shuting down vms" 
-    vagrant halt -f
+    vagrant $ARG -f
 elif [[ $ARG -eq "destroy" ]]
 then
     echo "destroying vms" 
-    vagrant destroy -f
+    vagrant $ARG -f
 fi
 
