@@ -25,7 +25,7 @@
 - name: edit pg_hda.conf file
   lineinfile:
     path: /var/lib/pgsql/13/data/pg_hba.conf
-    line: host	replication 	replica 	10.0.0.12/8		md5 # dbs_ip as variables
+    line: host	replication 	replica 	192.168.44.12/24	md5 # dbs_ip as variables
     state: present
   notify: restart_service
 

@@ -1,5 +1,6 @@
 ---
 - hosts: APP
+  # become: yes
   roles:
     - docker
     # - flask
