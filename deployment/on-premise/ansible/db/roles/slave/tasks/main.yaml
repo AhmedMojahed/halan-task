@@ -1,4 +1,9 @@
 ---
+- name: Stop postgres Service
+  systemd:
+    name: postgresql-13
+    state: stopped
+
 - name: Moving old conf.
   command: mv /var/lib/pgsql/13/data/ /var/lib/pgsql/13/data-orig/
 

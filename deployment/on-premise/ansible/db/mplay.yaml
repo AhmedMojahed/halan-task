@@ -3,36 +3,57 @@
   tasks:
     - name: Disable postgres default module
       command: dnf -qy module disable postgresql
+      when: ansible_facts['major_version'] = "8"
 
     - name: Install postgres repo
       dnf:
         name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
         disable_gpg_check: yes
+      when: ansible_facts['major_version'] = "8"
+
+    
+    - name: Install postgres repo
+      yum:
+        name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+        disable_gpg_check: yes
+      when: ansible_facts['major_version'] = "7"
 
     - name: Install Postgres PKGS
-      dnf:
+      yum:
         name:
           - postgresql13
           - postgresql13-server
+          - python3-pip
+        state: latest
+        update_cache: true
         disable_gpg_check: yes
-    
+    - name: Installing pexpect
+      pip:
+        name: pexpect
+        state: present
+
     - name: Initialize DataBase
       command: /usr/pgsql-13/bin/postgresql-13-setup initdb
 
     - name: Start and Enable postgres service
       systemd:
         name: postgresql-13
-        state: stopped
+        state: started
         enabled: yes
     
     - name: Add postgres to firewall
       firewalld:
         service: postgresql
         permanent: yes
+        state: enabled
       notify: firewall_reload
     
     - meta: flush_handlers
-        
+
+  handlers:
+    - name: firewall_reload
+      command: firewall-cmd --reload
+      
 
 
 - hosts: DBM
@@ -44,6 +65,4 @@
     - slave
 
 
-- handlers:
-    - name: firewall_reload
-      command: firewall-cmd --reload
+  

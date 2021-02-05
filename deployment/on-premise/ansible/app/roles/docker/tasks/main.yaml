@@ -7,14 +7,12 @@
 
 - name: copy app files
   copy:
-    src: ../../../../../../../programming/
-    dest: /root/
-  notify: change_dir
-
-- meta: flush_handlers
+    # src: ../../../../../../../programming/
+    src: files/app/
+    dest: /root/app/
 
 - name: build app image
-  command: docker image build . -t api-app
+  command: docker image build /root/app/ -t api-app
 
 - name: Create container
   command: docker container run -d --name api -p 80:5050 api-app
