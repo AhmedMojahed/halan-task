@@ -44,6 +44,7 @@ vagrant ssh node1   # to connect to app machine
 vagrant ssh node2   # to connect to MasterDB machine
 vagrant ssh node3   # to connect to SlaveDB machine
 ```
+7. To test app running with default values go [here](http://192.168.44.10)
 
 ### Note:
 - You can change defualt values by changing extra_vars in [vagrantfile](/deployment/on-premise/vagrant/Vagrantfile) and run the same command in step 3.
