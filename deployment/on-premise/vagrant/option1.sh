@@ -2,7 +2,6 @@
 
 ARG=$1
 
-cd deployment/on-premise/vagrant/
 if [[ $ARG -eq "up" ]]
 then
     echo "creating vms" 
