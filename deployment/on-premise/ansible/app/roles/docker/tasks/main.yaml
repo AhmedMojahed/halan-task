@@ -1,27 +1,26 @@
 ---
 - name: Install docker
-  script: files/get-docker.sh
+  command: "curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh"
   notify: start_service
-
 - meta: flush_handlers
 
-- name: copy app files
-  copy:
-    # src: ../../../../../../../programming/
-    src: files/app/
-    dest: /home/vagrant/app/
+# - name: copy app files
+#   copy:
+#     # src: ../../../../../../../programming/
+#     src: files/app/
+#     dest: /home/vagrant/app/
 
-- name: build app image
-  # command: docker image build /home/vagrant/app/ -t api-app
-  docker_image:
-    name: app-api
-    build:
-      path: /home/vagrant/app/
+# - name: build app image
+#   # command: docker image build /home/vagrant/app/ -t api-app
+#   docker_image:
+#     name: app-api
+#     build:
+#       path: /home/vagrant/app/
 
 - name: Create container
   docker_container:
-    name: api
-    image: app-api
+    name: halan-api-app
+    image: amogahed2019/halan-api
     restart: yes
     ports:
     - "80:5050"
