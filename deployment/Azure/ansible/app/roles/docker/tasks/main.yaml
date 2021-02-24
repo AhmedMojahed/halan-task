@@ -25,7 +25,7 @@
   docker_container:
     name: halan-api-app
     image: amogahed2019/halan-api
-    restart: yes
+    restart_policy: always
     ports:
     - "80:5050"
     env:

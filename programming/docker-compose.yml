@@ -14,8 +14,13 @@ services:
       - psql-data:/var/lib/postgresql/data
   
   api:
+    image: amogahed2019/halan-api
     restart: always
-    build: .
+    environment:
+      MASTERDB_PRIVATE_IP: psql
+      DB_USER_NAME: devops
+      DB_NAME: devops
+      DB_USER_PASS: devops
     ports: 
       - '80:5050'
     depends_on:
