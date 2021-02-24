@@ -25,7 +25,7 @@ resource "azurerm_virtual_network" "halannetwork" {
   name                = var.virtual_network
   location            = var.location
   resource_group_name = azurerm_resource_group.halangroup.name
-  address_space       = [var.address_space]
+  address_space       = [var.vn_address_space]
 }
 
 # Main Virtual Subnet
@@ -33,7 +33,7 @@ resource "azurerm_subnet" "halansubnet" {
   name                 = "${var.virtual_network}-sub1"
   resource_group_name  = azurerm_resource_group.halangroup.name
   virtual_network_name = azurerm_virtual_network.halannetwork.name
-  address_prefixes     = [var.address_prefixes]
+  address_prefixes     = [var.vn_sub1_address_prefixes]
 }
 
 ##########################################################
@@ -78,7 +78,7 @@ resource "azurerm_linux_virtual_machine" "halanappvm" {
 
   admin_ssh_key {
     username   = "adminuser"
-    public_key = "~/.ssh/id_rsa.pub"
+    public_key = file("~/.ssh/id_rsa.pub")
   }
 
   os_disk {
@@ -135,7 +135,7 @@ resource "azurerm_linux_virtual_machine" "halandbmvm" {
 
   admin_ssh_key {
     username   = "adminuser"
-    public_key = "~/.ssh/id_rsa.pub"
+    public_key = file("~/.ssh/id_rsa.pub")
   }
 
   os_disk {
@@ -193,7 +193,7 @@ resource "azurerm_linux_virtual_machine" "halandbsvm" {
 
   admin_ssh_key {
     username   = "adminuser"
-    public_key = "~/.ssh/id_rsa.pub"
+    public_key = file("~/.ssh/id_rsa.pub")
   }
 
   os_disk {
@@ -235,4 +235,15 @@ output "MASTERDB_PRIVATE_IP" {
 }
 output "SLAVEDB_PRIVATE_IP" {
   value = var.dbs_vm_private_ip
+}
+
+
+output "APP_PUBLIC_IP" {
+  value = azurerm_linux_virtual_machine.halanappvm.public_ip_address
+}
+output "MASTERDB_PUBLIC_IP" {
+  value = azurerm_linux_virtual_machine.halandbmvm.public_ip_address
+}
+output "SLAVEDB_PUBLIC_IP" {
+  value = azurerm_linux_virtual_machine.halandbsvm.public_ip_address
 }
