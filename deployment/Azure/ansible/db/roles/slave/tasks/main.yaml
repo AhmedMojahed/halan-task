@@ -9,13 +9,6 @@
   ignore_errors: yes
 
 - name: copy conf files and link replica
-  # become_user: postgres
-  # postgresql_slot:
-  #   slot_name: pgstandby1
-  #   db: "{{ DB_NAME }}"
-  #   login_host: "{{ MASTERDB_PRIVATE_IP }}"
-  #   login_host: "{{ DB_USER_NAME }}"
-  #   login_password: "{{ DB_USER_PASS }}"
   expect:
     command: sudo -u postgres -s pg_basebackup -h {{ MASTERDB_PRIVATE_IP }} -D /var/lib/pgsql/13/data -U {{ DB_REPLICA_NAME }} -v -P -R -X stream -C -S pgstandby1 # MASTERDB_PRIVATE_IP, DB_REPLICA_NAME
     responses:

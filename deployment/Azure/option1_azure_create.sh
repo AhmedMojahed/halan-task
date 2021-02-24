@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ## Createing infra
-# echo "Createing Vms and other resources"
+echo "Createing Vms and other resources"
 terraform init
 terraform apply -auto-approve
 
@@ -24,11 +24,12 @@ echo "adminuser@$(terraform output -raw SLAVEDB_PUBLIC_IP)" >> ansible/hosts
 echo "" >> ansible/hosts
 
 ## running ansible automation with extra vars
-ansible-playbook -i ansible/hosts ansible/mproj.yaml -e "ansible_become=yes \
-DB_NAME=$(terraform output -raw DB_NAME) \
+export ANSIBLE_HOST_KEY_CHECKING=False
+ansible-playbook -i ansible/hosts ansible/mproj.yaml -e "DB_NAME=$(terraform output -raw DB_NAME) \
 DB_REPLICA_NAME=$(terraform output -raw DB_REPLICA_NAME) \
 DB_REPLICA_PASS=$(terraform output -raw DB_REPLICA_PASS) \
 DB_USER_NAME=$(terraform output -raw DB_USER_NAME) \
 DB_USER_PASS=$(terraform output -raw DB_USER_PASS) \
+APP_PRIVATE_IP=$(terraform output -raw APP_PRIVATE_IP) \
 MASTERDB_PRIVATE_IP=$(terraform output -raw MASTERDB_PRIVATE_IP) \
 SLAVEDB_PRIVATE_IP=$(terraform output -raw SLAVEDB_PRIVATE_IP)"

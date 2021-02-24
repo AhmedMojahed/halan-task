@@ -1,21 +1,25 @@
 ---
-- name: Install docker
-  command: "curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh"
+
+- name: Instll yum packages
+  yum:
+    name: yum-utils
+    state: latest
+    disable_gpg_check: yes
+
+- name: Add Docker repo
+  command: yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+- name: Install Docker
+  yum:
+    name:
+      - docker-ce 
+      - docker-ce-cli 
+      - containerd.io
+    state: latest
+    disable_gpg_check: yes
   notify: start_service
+
 - meta: flush_handlers
-
-# - name: copy app files
-#   copy:
-#     # src: ../../../../../../../programming/
-#     src: files/app/
-#     dest: /home/vagrant/app/
-
-# - name: build app image
-#   # command: docker image build /home/vagrant/app/ -t api-app
-#   docker_image:
-#     name: app-api
-#     build:
-#       path: /home/vagrant/app/
 
 - name: Create container
   docker_container:
@@ -29,3 +33,16 @@
       DB_NAME: "{{ DB_NAME }}" 
       DB_USER_NAME: "{{ DB_USER_NAME }}" 
       DB_USER_PASS: "{{ DB_USER_PASS }}" 
+
+- name: Start and Enable firewalld service
+  systemd:
+    name: firewalld
+    state: started
+    enabled: yes
+
+- name: Add Port 80 to firewall
+  firewalld:
+    port: "80/tcp"
+    permanent: yes
+    state: enabled
+  notify: firewall_reload

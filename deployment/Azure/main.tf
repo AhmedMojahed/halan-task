@@ -84,7 +84,7 @@ resource "azurerm_linux_virtual_machine" "halanappvm" {
   os_disk {
     name                 = "${var.app_vm_name}-os-disk"
     caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
+    storage_account_type = "StandardSSD_LRS"
   }
 
   source_image_reference {
@@ -141,7 +141,7 @@ resource "azurerm_linux_virtual_machine" "halandbmvm" {
   os_disk {
     name                 = "${var.dbm_vm_name}-os-disk"
     caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
+    storage_account_type = "StandardSSD_LRS"
   }
 
   source_image_reference {
@@ -199,7 +199,7 @@ resource "azurerm_linux_virtual_machine" "halandbsvm" {
   os_disk {
     name                 = "${var.dbs_vm_name}-os-disk"
     caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
+    storage_account_type = "StandardSSD_LRS"
   }
 
   source_image_reference {
@@ -229,6 +229,9 @@ output "DB_REPLICA_NAME" {
 output "DB_REPLICA_PASS" {
   value     = var.DB_REPLICA_PASS
   sensitive = true
+}
+output "APP_PRIVATE_IP" {
+  value = var.app_vm_private_ip
 }
 output "MASTERDB_PRIVATE_IP" {
   value = var.dbm_vm_private_ip
