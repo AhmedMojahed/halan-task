@@ -1,22 +1,14 @@
 ---
 - hosts: DBC
+  become: yes
   tasks:
     - name: Disable postgres default module
       command: dnf -qy module disable postgresql
-      # when: ansible_facts['distribution_major_version'] = "8"
 
     - name: Install postgres repo
       dnf:
         name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-8-x86_64/pgdg-redhat-repo-latest.noarch.rpm
         disable_gpg_check: yes
-      # when: ansible_facts['distribution_major_version'] = "8"
-
-    
-    # - name: Install postgres repo
-    #   yum:
-    #     name: https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
-    #     disable_gpg_check: yes
-      # when: ansible_facts['distribution_major_version'] = "7"
 
     - name: Install Postgres PKGS
       yum:
@@ -48,6 +40,12 @@
         service: postgresql
         permanent: yes
         state: enabled
+
+    - name: add postgres ports to firewall
+      firewalld:
+        ports: "5432/tcp"
+        state: enabled
+        permanent: yes
       notify: firewall_reload
     
     - meta: flush_handlers
@@ -59,10 +57,12 @@
 
 
 - hosts: DBM
+  become: yes
   roles:
     - master
 
 - hosts: DBS
+  become: yes
   roles:
     - slave
 

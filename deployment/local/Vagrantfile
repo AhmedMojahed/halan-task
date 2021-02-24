@@ -25,7 +25,7 @@ Vagrant.configure("2") do |config|
       SHELL
       if machine_id == N
         machine.vm.provision :ansible do |ansible|
-          ansible.playbook = "../ansible/mproj.yaml"
+          ansible.playbook = "ansible/mproj.yaml"
           ansible.limit= "all"
           ansible.become = true
           ansible.extra_vars = { 
@@ -38,7 +38,7 @@ Vagrant.configure("2") do |config|
             # MASTERDB_PRIVATE_IP: "192.168.44.11",
             # SLAVEDB_PRIVATE_IP: "192.168.44.12"
           }
-          # ansible.inventory_path= "../ansible/hosts"
+          # ansible.inventory_path= "ansible/hosts"
           ansible.groups = {
             "APP" => ["node1"],
             "DBM" => ["node2"],

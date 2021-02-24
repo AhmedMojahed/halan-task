@@ -9,11 +9,6 @@
     password: "{{ DB_USER_PASS }}"
     role_attr_flags: "SUPERUSER"
     state: present
-  # expect:
-  #   command: sudo -u postgres -s createuser --superuser -P -e {{ DB_USER_NAME }} # DB_USER_NAME
-  #   responses:
-  #     (?i)password: "{{ DB_USER_PASS }}"    # DB_USER_PASS
-  #     (?i)again: "{{ DB_USER_PASS }}"     # DB_USER_PASS
 
 - name: Create replica User for database replication
   become_user: postgres
@@ -22,12 +17,7 @@
     password: "{{ DB_REPLICA_PASS }}"
     role_attr_flags: "REPLICATION"
     state: present
-  # expect:
-  #   command: sudo -u postgres -s createuser --replication -P -e {{ DB_REPLICA_NAME }} # DB_REPLICA_NAME
-  #   responses:
-  #     (?i)password: "{{ DB_REPLICA_PASS }}"   # DB_REPLICA_PASS
-  #     (?i)again: "{{ DB_REPLICA_PASS }}"    # DB_REPLICA_PASS
-   
+
 
 - name: Add replica user entry in pg_hda.conf file
   postgresql_pg_hba:
@@ -37,17 +27,14 @@
     source: "{{ SLAVEDB_PRIVATE_IP }}/24"
     databases: replication
 
-  name: Add db_user entry in pg_hda.conf file
+
+- name: Add db_user entry in pg_hda.conf file
   postgresql_pg_hba:
     dest: /var/lib/pgsql/13/data/pg_hba.conf
     contype: host
     users: "{{ DB_USER_NAME }}" 
     source: "{{ APP_PRIVATE_IP }}/24"
     databases: all
-    
-  # lineinfile:
-  #   path: /var/lib/pgsql/13/data/pg_hba.conf
-  #   state: present
   notify: restart_service
 
 - meta: flush_handlers
