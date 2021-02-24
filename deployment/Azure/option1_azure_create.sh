@@ -1,25 +1,31 @@
 #!/bin/bash
 
 ## Createing infra
-echo "Createing Vms and other resources"
+# echo "Createing Vms and other resources"
 terraform init
 terraform apply -auto-approve
 
 ## adding VMs public IPs to ansible inventory
-cd ansible/
-echo "" > hosts
-echo "[APP]" >> hosts
-terraform output APP_PUBLIC_IP >> hosts
-echo "[DBC]" >> hosts
-terraform output MASTERDB_PUBLIC_IP >> hosts
-terraform output SLAVEDB_PUBLIC_IP >> hosts
-echo "[DBM]" >> hosts
-terraform output MASTERDB_PUBLIC_IP >> hosts
-echo "[DBS]" >> hosts
-terraform output SLAVEDB_PUBLIC_IP >> hosts
+
+echo "" > ansible/hosts
+echo "[APP]" >> ansible/hosts
+echo "adminuser@$(terraform output -raw APP_PUBLIC_IP)" >> ansible/hosts
+echo "" >> ansible/hosts
+echo "[DBC]" >> ansible/hosts
+echo "adminuser@$(terraform output -raw MASTERDB_PUBLIC_IP)" >> ansible/hosts
+echo "" >> ansible/hosts
+echo "adminuser@$(terraform output -raw SLAVEDB_PUBLIC_IP)" >> ansible/hosts
+echo "" >> ansible/hosts
+echo "[DBM]" >> ansible/hosts
+echo "adminuser@$(terraform output -raw MASTERDB_PUBLIC_IP)" >> ansible/hosts
+echo "" >> ansible/hosts
+echo "[DBS]" >> ansible/hosts
+echo "adminuser@$(terraform output -raw SLAVEDB_PUBLIC_IP)" >> ansible/hosts
+echo "" >> ansible/hosts
 
 ## running ansible automation with extra vars
-asnible-playbook -i hosts mproj.yaml -e "DB_NAME=$(terraform output -raw DB_NAME) \
+ansible-playbook -i ansible/hosts ansible/mproj.yaml -e "ansible_become=yes \
+DB_NAME=$(terraform output -raw DB_NAME) \
 DB_REPLICA_NAME=$(terraform output -raw DB_REPLICA_NAME) \
 DB_REPLICA_PASS=$(terraform output -raw DB_REPLICA_PASS) \
 DB_USER_NAME=$(terraform output -raw DB_USER_NAME) \

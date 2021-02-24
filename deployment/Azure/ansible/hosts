@@ -1,12 +1,15 @@
+
 [APP]
-root@10.0.0.10
+adminuser@51.124.25.82
 
 [DBC]
-root@10.0.0.11
-root@10.0.0.12
+adminuser@51.124.24.250
+
+adminuser@51.124.24.255
 
 [DBM]
-root@10.0.0.11
+adminuser@51.124.24.250
 
 [DBS]
-root@10.0.0.12
+adminuser@51.124.24.255
+
