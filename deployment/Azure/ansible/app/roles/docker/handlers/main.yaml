@@ -5,5 +5,3 @@
     state: started
     enabled: yes
 
-- name: firewall_reload
-  command: firewall-cmd --reload

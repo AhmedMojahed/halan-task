@@ -40,6 +40,12 @@
         service: postgresql
         permanent: yes
         state: enabled
+
+    - name: add postgres ports to firewall
+      firewalld:
+        ports: "5432/tcp"
+        state: enabled
+        permanent: yes
       notify: firewall_reload
     
     - meta: flush_handlers

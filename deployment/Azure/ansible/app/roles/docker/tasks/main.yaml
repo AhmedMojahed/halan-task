@@ -34,15 +34,3 @@
       DB_USER_NAME: "{{ DB_USER_NAME }}" 
       DB_USER_PASS: "{{ DB_USER_PASS }}" 
 
-- name: Start and Enable firewalld service
-  systemd:
-    name: firewalld
-    state: started
-    enabled: yes
-
-- name: Add Port 80 to firewall
-  firewalld:
-    port: "80/tcp"
-    permanent: yes
-    state: enabled
-  notify: firewall_reload
