@@ -1,0 +1,4 @@
+---
+- hosts: APP
+  roles:
+    - docker

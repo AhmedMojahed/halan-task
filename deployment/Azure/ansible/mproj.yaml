@@ -1,0 +1,15 @@
+---
+- hosts: all
+  tasks:
+    - name: pip_pkgs_install
+      pip:
+        name:
+          - docker
+          - pexpect
+          - psycopg2-binary
+        state: present
+   
+
+- import_playbook: db/mplay.yaml
+- import_playbook: app/mplay.yaml
+
