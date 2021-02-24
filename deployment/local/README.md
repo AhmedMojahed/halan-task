@@ -33,7 +33,7 @@ vagrant ssh node3   # to connect to SlaveDB machine
 - `http://192.168.44.10/allips`
 
 ### Customizing default values
-- You can change the defualt values of the database by changing extra_vars in [`vagrantfile`](/deployment/local/vagrant/Vagrantfile)
+- You can change the defualt values of the database by changing extra_vars in [`vagrantfile`](/deployment/local/Vagrantfile)
 Uncomment and change values as you like.
  ```bash
     ansible.extra_vars = { 
