@@ -4,6 +4,10 @@ This is a solution for the writen [task](/DevOps_Challenge.pdf)
 # Assumptions
 - you are running a linux box
 - if using windows you know how to use bash shell
+## Programming
+- I've built a simple api with python and flask.
+- Dockerized the application , built the image and uploaded it to my repo on dockerhub.
+- then used it in the automation files
 
 ## Deployment: Option #1
 In this option we will use 2 methods choose what you want.
