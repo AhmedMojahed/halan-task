@@ -12,6 +12,18 @@ In this option we will deploy 3 node app:
 - MasterDB VM (postgresql-13) node2
 - SlaveDB VM for replication node3
 
+### Getting Started
+
+1. Clone this repo
+```bash
+git clone https://github.com/AhmedMojahed/devops-task.git
+```
+or just download the zip file
+2. Navigate to the repo directory
+```bash
+cd devops-task
+```
+
 ### Local(on-premise) Deployment
 
 ### Prerequisites
