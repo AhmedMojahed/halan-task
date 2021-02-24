@@ -1,6 +1,10 @@
 # devops-task
 This is a solution for the writen [task](/DevOps_Challenge.pdf)
 
+# Assumptions
+- you are running a linux box
+- if using windows you know how to use bash shell
+
 ## Deployment: Option #1
 In this option we will use 2 methods choose what you want.
 
@@ -39,6 +43,7 @@ cd devops-task
 ### Prerequisites
 1. [`Install Azure cli`](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
 2. [`Install Asnible`](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
+3. [`Install Terraform`](https://www.terraform.io/downloads.html)
 
 ### Go to the [`Azure`](/deployment/Azure/) deployment folder for more instruction on how to use the solution
 

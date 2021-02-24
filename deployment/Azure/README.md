@@ -3,7 +3,7 @@
 ## Prerequisites
 1. [`Install Azure cli`](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
 2. [`Install Asnible`](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
-3. [`Install Terraform`]()
+3. [`Install Terraform`](https://www.terraform.io/downloads.html)
 
 ### Default values setup
 1. First You need to log in to you azure account throgh the cli
