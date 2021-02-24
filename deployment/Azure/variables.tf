@@ -75,3 +75,31 @@ variable "dbs_vm_private_ip" {
 }
 
 ####################################################
+
+### enviroment variables ###
+# DB_NAME: "devops",
+# DB_USER_NAME: "devops",
+# DB_USER_PASS: "devops",
+# DB_REPLICA_NAME: "replica",
+# DB_REPLICA_PASS: "replica",
+
+variable "DB_NAME" {
+  description = "The name of the data base will be used by the application"
+  default = "devops"
+}
+variable "DB_USER_NAME" {
+  description = "The user name of the data base will be used to access the data base by the application "
+  default = "devops"
+}
+variable "DB_USER_PASS" {
+  description = "The database user password of the data base will be used to access the data base by the application"
+  default = "devops"
+}
+variable "DB_REPLICA_NAME" {
+  description = "The user name of the data base replication user"
+  default = "replica"
+}
+variable "DB_REPLICA_PASS" {
+  description = "The password of the data base replication user"
+  default = "replica"
+}

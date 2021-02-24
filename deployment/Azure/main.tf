@@ -16,8 +16,8 @@ provider "azurerm" {
 # Create Main resourses
 # resourse Group
 resource "azurerm_resource_group" "halangroup" {
-  name     =   var.resource_group
-  location =  var.location
+  name     = var.resource_group
+  location = var.location
 }
 # Networking
 # Main Virtual Network
@@ -125,7 +125,7 @@ resource "azurerm_network_interface" "halandbmvmnic" {
 
 # dbm VM Linux
 resource "azurerm_linux_virtual_machine" "halandbmvm" {
-  name                            = "${var.dbm_vm_name}"
+  name                            = var.dbm_vm_name
   location                        = var.location
   resource_group_name             = azurerm_resource_group.halangroup.name
   network_interface_ids           = [azurerm_network_interface.halandbmvmnic.id]
@@ -183,7 +183,7 @@ resource "azurerm_network_interface" "halandbsvmnic" {
 
 # dbs VM Linux
 resource "azurerm_linux_virtual_machine" "halandbsvm" {
-  name                            = "${var.dbs_vm_name}"
+  name                            = var.dbs_vm_name
   location                        = var.location
   resource_group_name             = azurerm_resource_group.halangroup.name
   network_interface_ids           = [azurerm_network_interface.halandbsvmnic.id]
@@ -210,3 +210,29 @@ resource "azurerm_linux_virtual_machine" "halandbsvm" {
   }
 }
 
+##########################################################
+
+### Module outputs ###
+output "DB_NAME" {
+  value = var.DB_NAME
+}
+output "DB_USER_NAME" {
+  value = var.DB_USER_NAME
+}
+output "DB_USER_PASS" {
+  value     = var.DB_USER_PASS
+  sensitive = true
+}
+output "DB_REPLICA_NAME" {
+  value = var.DB_REPLICA_NAME
+}
+output "DB_REPLICA_PASS" {
+  value     = var.DB_REPLICA_PASS
+  sensitive = true
+}
+output "MASTERDB_PRIVATE_IP" {
+  value = var.dbm_vm_private_ip
+}
+output "SLAVEDB_PRIVATE_IP" {
+  value = var.dbs_vm_private_ip
+}
