@@ -16,24 +16,24 @@ provider "azurerm" {
 # Create Main resourses
 # resourse Group
 resource "azurerm_resource_group" "halangroup" {
-  name     = "halangroup"
-  location = "West Europe"
+  name     =   var.resource_group
+  location =  var.location
 }
 # Networking
 # Main Virtual Network
 resource "azurerm_virtual_network" "halannetwork" {
-  name                = "halannetwork"
-  location            = azurerm_resource_group.halangroup.location
+  name                = var.virtual_network
+  location            = var.location
   resource_group_name = azurerm_resource_group.halangroup.name
-  address_space       = ["10.0.0.0/16"]
+  address_space       = [var.address_space]
 }
 
 # Main Virtual Subnet
 resource "azurerm_subnet" "halansubnet" {
-  name                 = "sub1"
+  name                 = "${var.virtual_network}-sub1"
   resource_group_name  = azurerm_resource_group.halangroup.name
   virtual_network_name = azurerm_virtual_network.halannetwork.name
-  address_prefixes     = ["10.0.0.0/24"]
+  address_prefixes     = [var.address_prefixes]
 }
 
 ##########################################################
@@ -44,23 +44,23 @@ resource "azurerm_subnet" "halansubnet" {
 
 # App VM public Ip
 resource "azurerm_public_ip" "halanappvmpubip" {
-  name                = "halan-app-vm-pubip"
-  location            = azurerm_resource_group.halangroup.location
+  name                = "${var.app_vm_name}-pubip"
+  location            = var.location
   resource_group_name = azurerm_resource_group.halangroup.name
   allocation_method   = "Dynamic"
 }
 
 # App VM Nic
 resource "azurerm_network_interface" "halanappvmnic" {
-  name                = "halan-app-vm-nic"
-  location            = azurerm_resource_group.halangroup.location
+  name                = "${var.app_vm_name}-nic"
+  location            = var.location
   resource_group_name = azurerm_resource_group.halangroup.name
 
   ip_configuration {
-    name                          = "halan-app-vm-nic-configuration"
+    name                          = "${var.app_vm_name}-nic-configuration"
     subnet_id                     = azurerm_subnet.halansubnet.id
     private_ip_address_allocation = "Static"
-    private_ip_address            = "10.0.0.10"
+    private_ip_address            = var.app_vm_private_ip
     public_ip_address_id          = azurerm_public_ip.halanappvmpubip.id
   }
 
@@ -68,11 +68,11 @@ resource "azurerm_network_interface" "halanappvmnic" {
 
 # APP VM Linux
 resource "azurerm_linux_virtual_machine" "halanappvm" {
-  name                            = "halan-app-vm"
-  location                        = azurerm_resource_group.halangroup.location
+  name                            = var.app_vm_name
+  location                        = var.location
   resource_group_name             = azurerm_resource_group.halangroup.name
   network_interface_ids           = [azurerm_network_interface.halanappvmnic.id]
-  size                            = "Standard_A1_V2"
+  size                            = var.vm_size
   admin_username                  = "adminuser"
   disable_password_authentication = true
 
@@ -82,7 +82,7 @@ resource "azurerm_linux_virtual_machine" "halanappvm" {
   }
 
   os_disk {
-    name                 = "halan-app-vm-os-disk"
+    name                 = "${var.app_vm_name}-os-disk"
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
@@ -95,28 +95,29 @@ resource "azurerm_linux_virtual_machine" "halanappvm" {
   }
 }
 
+##########################################################
 
 ## DBMaster Vm ##
 
 # DBMaster VM public Ip
 resource "azurerm_public_ip" "halandbmvmpubip" {
-  name                = "halan-dbm-vm-pubip"
-  location            = azurerm_resource_group.halangroup.location
+  name                = "${var.dbm_vm_name}-pubip"
+  location            = var.location
   resource_group_name = azurerm_resource_group.halangroup.name
   allocation_method   = "Dynamic"
 }
 
 # dbm VM Nic
 resource "azurerm_network_interface" "halandbmvmnic" {
-  name                = "halan-dbm-vm-nic"
-  location            = azurerm_resource_group.halangroup.location
+  name                = "${var.dbm_vm_name}-nic"
+  location            = var.location
   resource_group_name = azurerm_resource_group.halangroup.name
 
   ip_configuration {
-    name                          = "halan-dbm-vm-nic-configuration"
+    name                          = "${var.dbm_vm_name}-nic-configuration"
     subnet_id                     = azurerm_subnet.halansubnet.id
     private_ip_address_allocation = "Static"
-    private_ip_address            = "10.0.0.11"
+    private_ip_address            = var.dbm_vm_private_ip
     public_ip_address_id          = azurerm_public_ip.halandbmvmpubip.id
   }
 
@@ -124,11 +125,11 @@ resource "azurerm_network_interface" "halandbmvmnic" {
 
 # dbm VM Linux
 resource "azurerm_linux_virtual_machine" "halandbmvm" {
-  name                            = "halan-dbm-vm"
-  location                        = azurerm_resource_group.halangroup.location
+  name                            = "${var.dbm_vm_name}"
+  location                        = var.location
   resource_group_name             = azurerm_resource_group.halangroup.name
   network_interface_ids           = [azurerm_network_interface.halandbmvmnic.id]
-  size                            = "Standard_A1_V2"
+  size                            = var.vm_size
   admin_username                  = "adminuser"
   disable_password_authentication = true
 
@@ -138,7 +139,7 @@ resource "azurerm_linux_virtual_machine" "halandbmvm" {
   }
 
   os_disk {
-    name                 = "halan-dbm-vm-os-disk"
+    name                 = "${var.dbm_vm_name}-os-disk"
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
@@ -152,28 +153,29 @@ resource "azurerm_linux_virtual_machine" "halandbmvm" {
 }
 
 
+##########################################################
 
 ## dbs Vm ##
 
 # dbs VM public Ip
 resource "azurerm_public_ip" "halandbsvmpubip" {
-  name                = "halan-dbs-vm-pubip"
-  location            = azurerm_resource_group.halangroup.location
+  name                = "${var.dbs_vm_name}-pubip"
+  location            = var.location
   resource_group_name = azurerm_resource_group.halangroup.name
   allocation_method   = "Dynamic"
 }
 
 # dbs VM Nic
 resource "azurerm_network_interface" "halandbsvmnic" {
-  name                = "halan-dbs-vm-nic"
-  location            = azurerm_resource_group.halangroup.location
+  name                = "${var.dbs_vm_name}-nic"
+  location            = var.location
   resource_group_name = azurerm_resource_group.halangroup.name
 
   ip_configuration {
-    name                          = "halan-dbs-vm-nic-configuration"
+    name                          = "${var.dbs_vm_name}-nic-configuration"
     subnet_id                     = azurerm_subnet.halansubnet.id
     private_ip_address_allocation = "Static"
-    private_ip_address            = "10.0.0.12"
+    private_ip_address            = var.dbs_vm_private_ip
     public_ip_address_id          = azurerm_public_ip.halandbsvmpubip.id
   }
 
@@ -181,11 +183,11 @@ resource "azurerm_network_interface" "halandbsvmnic" {
 
 # dbs VM Linux
 resource "azurerm_linux_virtual_machine" "halandbsvm" {
-  name                            = "halan-dbs-vm"
-  location                        = azurerm_resource_group.halangroup.location
+  name                            = "${var.dbs_vm_name}"
+  location                        = var.location
   resource_group_name             = azurerm_resource_group.halangroup.name
   network_interface_ids           = [azurerm_network_interface.halandbsvmnic.id]
-  size                            = "Standard_A1_V2"
+  size                            = var.vm_size
   admin_username                  = "adminuser"
   disable_password_authentication = true
 
@@ -195,7 +197,7 @@ resource "azurerm_linux_virtual_machine" "halandbsvm" {
   }
 
   os_disk {
-    name                 = "halan-dbs-vm-os-disk"
+    name                 = "${var.dbs_vm_name}-os-disk"
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
