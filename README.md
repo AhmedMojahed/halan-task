@@ -1,4 +1,4 @@
-# devops-task
+# Halan-task
 This is a solution for the writen [task](/DevOps_Challenge.pdf)
 
 # Assumptions
