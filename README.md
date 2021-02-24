@@ -26,7 +26,7 @@ In this option we will deploy 3 node app:
 
 ### Prerequisites
 1. [`Install Azure cli`](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
-2. [Install Asnible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
+2. [`Install Asnible`](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
 
 ### Go to the [`Azure`](/deployment/Azure/) deployment folder for more instruction on how to use the solution
 
