@@ -1,13 +1,13 @@
-## Local(on-premise) Deployment
+# Local(on-premise) Deployment
 
-### Prerequisites
+## Prerequisites
 1. [`Install Vagrant`](https://www.vagrantup.com/downloads)
 2. [`Install Asnible`](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
 3. [`Install virtualbox`](https://www.virtualbox.org/wiki/Downloads)
 
-### Getting Started
+## Getting Started
 
-#### Default values setup
+### Default values setup
 1. For auto deployment with default values:
 ```bash
 bash option1.sh up
@@ -22,7 +22,7 @@ bash option1.sh destroy
 ```
 4. To ssh into any machine run the following commands 
 ```bash
-vagrant ssh node1   # to connect to app machine
+vagrant ssh node1   # to connect to app machine 
 vagrant ssh node2   # to connect to MasterDB machine
 vagrant ssh node3   # to connect to SlaveDB machine
 ```
@@ -32,8 +32,8 @@ vagrant ssh node3   # to connect to SlaveDB machine
 - `http://192.168.44.10/ip`
 - `http://192.168.44.10/allips`
 
-#### Customizing default values
-- You can change the defualt values of the database by changing extra_vars in [`vagrantfile`](/deployment/on-premise/vagrant/Vagrantfile)
+### Customizing default values
+- You can change the defualt values of the database by changing extra_vars in [`vagrantfile`](/deployment/local/vagrant/Vagrantfile)
 Uncomment and change values as you like.
  ```bash
     ansible.extra_vars = { 
